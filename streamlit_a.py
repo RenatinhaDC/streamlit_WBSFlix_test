@@ -63,11 +63,11 @@ st.title("WBSFlix Recommender")
 st.write("The best movie recommendations for you!")
 
 # Input for user's favorite movie
-title = st.text_input("What is your favorite movie")
+title = st.text_input("What is your favorite movie?")
 st.write("Your favorite movie is:", title)
 
 # Call the recommendation function
-recommendations = get_top_n_recommendations(title, 5, movies_cosines_matrix, user_movie_matrix, movie_ratings_tags)
+recommendations = get_top_n_recommendations(movie_title, 5, movies_cosines_matrix, user_movie_matrix, movie_ratings_tags)
 
 # Display the recommendations
 st.write("Top 5 Recommendations:")
