@@ -64,20 +64,31 @@ title = st.sidebar.text_input("What is your favorite movie", "Toy Story")
 # Main area to display recommendations
 st.header("Your Recommendations")
 
-# Displaying user's favorite movie
+# Display user's favorite movie
 st.write("Your favorite movie is:", title)
 
-# Adding a button to trigger the recommendation process
+# Add a button to trigger the recommendation process
 if st.button("Get Recommendations"):
-    # Calling my recommendation function
-    recommendations = get_top_n_recommendations(
-        movie_title=title,
-        n=20,  
-        movies_cosines_matrix=movies_cosines_matrix,
-        user_movie_matrix=user_movie_matrix,
-        movie_ratings_tags=movie_ratings_tags
-    )
+    # Debugging: Print the contents of movie_ratings_tags
+    st.write("Contents of movie_ratings_tags:")
+    st.write(movie_ratings_tags)
 
-    # the recommendations
-    st.write("Top Recommendations:")
-    st.table(recommendations)
+    try:
+        # Call your recommendation function
+        recommendations = get_top_n_recommendations(
+            movie_title=title,
+            n=5,  # Replace with the desired number of recommendations
+            movies_cosines_matrix=movies_cosines_matrix,
+            user_movie_matrix=user_movie_matrix,
+            movie_ratings_tags=movie_ratings_tags
+        )
+
+        # Debugging: Print the recommendations
+        st.write("Top Recommendations:")
+        st.table(recommendations)
+
+    except Exception as e:
+        # Print the exception details for debugging
+        st.write(f"Error: {e}")
+        st.write("Full exception details:")
+        st.write(e)
