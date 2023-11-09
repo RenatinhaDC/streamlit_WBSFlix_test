@@ -1,19 +1,19 @@
 import pandas as pd
 import streamlit as st
 
-# Function to get top recommendations
+# Function to get top recommendations(Input is title)
 def get_top_n_recommendations(movie_title, n, movies_cosines_matrix, user_movie_matrix, movie_ratings_tags):
     # Find the movieId for the given movie title
     title_column_name = 'title'
 
-    # Check if the title column exists in the DataFrame
+    # Checking if the title column exists in the DataFrame
     if title_column_name not in movie_ratings_tags.columns:
         raise KeyError(f"Column '{title_column_name}' not found in movie_ratings_tags DataFrame.")
 
-    # Find the movieId for the given movie title (case-insensitive search)
+    # Finding the movieId for the given movie title (case-insensitive search)
     movieId = movie_ratings_tags[movie_ratings_tags[title_column_name].str.contains(movie_title, case=False)]['movieId'].values[0] if movie_ratings_tags[title_column_name].str.contains(movie_title, case=False).any() else None
 
-    # Check if movieId is found
+    # Checking if movieId is found
     if movieId is None:
         st.error(f"Movie with title '{movie_title}' not found.")
         return pd.DataFrame()
@@ -57,10 +57,10 @@ def get_top_n_recommendations(movie_title, n, movies_cosines_matrix, user_movie_
 
     return top_n_recommendations
 
-# Sample DataFrames (Replace with your actual data)
-movies_cosines_matrix = pd.DataFrame()  # Replace with your actual DataFrame
-user_movie_matrix = pd.DataFrame()  # Replace with your actual DataFrame
-movie_ratings_tags = pd.DataFrame()  # Replace with your actual DataFrame
+# Sample DataFrames 
+movies_cosines_matrix = pd.read_csv("movies_cosines_matrix.csv")  
+user_movie_matrix = pd.read_csv("user_movie_matrix.csv")  
+movie_ratings_tags = pd.read_csv("movie_ratings_tags.csv") 
 
 # Streamlit App
 st.title("WBSFlix Recommender")
