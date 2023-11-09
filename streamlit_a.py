@@ -1,4 +1,3 @@
-# Import necessary libraries
 import pandas as pd
 import streamlit as st
 
@@ -12,7 +11,12 @@ def get_top_n_recommendations(movie_title, n, movies_cosines_matrix, user_movie_
         raise KeyError(f"Column '{title_column_name}' not found in movie_ratings_tags DataFrame.")
 
     # Find the movieId for the given movie title (case-insensitive search)
-    movieId = movie_ratings_tags[movie_ratings_tags[title_column_name].str.contains(movie_title, case=False)]['movieId'].values[0]
+    movieId = movie_ratings_tags[movie_ratings_tags[title_column_name].str.contains(movie_title, case=False)]['movieId'].values[0] if movie_ratings_tags[title_column_name].str.contains(movie_title, case=False).any() else None
+
+    # Check if movieId is found
+    if movieId is None:
+        st.error(f"Movie with title '{movie_title}' not found.")
+        return pd.DataFrame()
 
     # Creating a DataFrame using the values from 'movies_cosines_matrix' for the input 'movieId'.
     movie_cosines_df = pd.DataFrame(movies_cosines_matrix.iloc[movies_cosines_matrix.index.get_loc(movieId)])
@@ -39,7 +43,7 @@ def get_top_n_recommendations(movie_title, n, movies_cosines_matrix, user_movie_
     movie_cosines_df = movie_cosines_df[movie_cosines_df["users_who_rated_both_movies"] > 20]
 
     # Getting the titles of the recommended movies
-    recommended_movie_titles = movie_ratings_tags.loc[movie_cosines_df.index, title_column_name]
+    recommended_movie_titles = movie_ratings_tags.loc[movie_cosines_df.index, "title"]
 
     # Creating a DataFrame with unique titles
     unique_recommendations = pd.DataFrame({
