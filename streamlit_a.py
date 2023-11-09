@@ -11,7 +11,7 @@ def get_top_n_recommendations(movie_title, n, movies_cosines_matrix, user_movie_
     if title_column_name not in movie_ratings_tags.columns:
         raise KeyError(f"Column '{title_column_name}' not found in movie_ratings_tags DataFrame.")
 
-    # Find the movieId for the given movie title
+    # Find the movieId for the given movie title (case-insensitive search)
     movieId = movie_ratings_tags[movie_ratings_tags[title_column_name].str.contains(movie_title, case=False)]['movieId'].values[0]
 
     # Creating a DataFrame using the values from 'movies_cosines_matrix' for the input 'movieId'.
@@ -39,7 +39,7 @@ def get_top_n_recommendations(movie_title, n, movies_cosines_matrix, user_movie_
     movie_cosines_df = movie_cosines_df[movie_cosines_df["users_who_rated_both_movies"] > 20]
 
     # Getting the titles of the recommended movies
-    recommended_movie_titles = movie_ratings_tags.loc[movie_cosines_df.index, "title"]
+    recommended_movie_titles = movie_ratings_tags.loc[movie_cosines_df.index, title_column_name]
 
     # Creating a DataFrame with unique titles
     unique_recommendations = pd.DataFrame({
@@ -67,7 +67,7 @@ title = st.text_input("What is your favorite movie?")
 st.write("Your favorite movie is:", title)
 
 # Call the recommendation function
-recommendations = get_top_n_recommendations(movie_title, 5, movies_cosines_matrix, user_movie_matrix, movie_ratings_tags)
+recommendations = get_top_n_recommendations(title, 5, movies_cosines_matrix, user_movie_matrix, movie_ratings_tags)
 
 # Display the recommendations
 st.write("Top 5 Recommendations:")
