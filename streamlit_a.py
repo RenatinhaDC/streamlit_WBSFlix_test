@@ -4,9 +4,9 @@ import pandas as pd
 
 # Defining the recommendation function
 
-def get_top_n_recommendations(movie_title, n, movies_cosines_matrix, user_movie_matrix, movie_ratings_tags):
+def get_top_n_recommendations(title, n, movies_cosines_matrix, user_movie_matrix, movie_ratings_tags):
     # Finding the movieId for the given movie title
-    movieId = movie_ratings_tags[movie_ratings_tags['title'].str.contains(movie_title, case=False)]['movieId'].values[0]
+    movieId = movie_ratings_tags[movie_ratings_tags['title'].str.contains(title, case=False)]['movieId'].values[0]
 
     # Geting the index corresponding to the movieId
     movie_index = movies_cosines_matrix.index.get_loc(movieId)
@@ -76,7 +76,7 @@ if st.button("Get Recommendations"):
     try:
         # Call your recommendation function
         recommendations = get_top_n_recommendations(
-            movie_title=title,
+            title=title,
             n=5,  # Replace with the desired number of recommendations
             movies_cosines_matrix=movies_cosines_matrix,
             user_movie_matrix=user_movie_matrix,
