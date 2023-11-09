@@ -1,82 +1,33 @@
-import os
-import pandas as pd
+
+#Function for streamlit
 import streamlit as st
+import pandas as pd
 
-# Function to get top recommendations (Input is title)
-def get_top_n_recommendations(movie_title, n, movies_cosines_matrix, user_movie_matrix, movie_ratings_tags):
-    # Find the movieId for the given movie title
-    title_column_name = 'title'
+# Calculate weighted scores and get top movies
+rating_w8t = 0.6
+count_w8t = 0.4
 
-    # Checking if the title column exists in the DataFrame
-    if title_column_name not in movie_ratings_tags.columns:
-        raise KeyError(f"Column '{title_column_name}' not found in movie_ratings_tags DataFrame.")
+rating_count_df['w8ed_score'] = (rating_count_df['mean'] * rating_w8t) + (rating_count_df['count'] * count_w8t)
 
-    # Finding the movieId for the given movie title (case-insensitive search)
-    movieId = movie_ratings_tags[movie_ratings_tags[title_column_name].str.contains(movie_title, case=False)]['movieId'].values[0] if movie_ratings_tags[title_column_name].str.contains(movie_title, case=False).any() else None
+top_movies = rating_count_df.sort_values(by='w8ed_score', ascending=False).head(20)
 
-    # Checking if movieId is found
-    if movieId is None:
-        st.error(f"Movie with title '{movie_title}' not found.")
-        return pd.DataFrame()
+top_movies_info = movie_ratings_tags[movie_ratings_tags['movieId'].isin(top_movies['movieId'])][movie_info_columns].drop_duplicates()
 
-    # Creating a DataFrame using the values from 'movies_cosines_matrix' for the input 'movieId'.
-    movie_cosines_df = pd.DataFrame(movies_cosines_matrix.iloc[movies_cosines_matrix.index.get_loc(movieId)])
-
-    # Renaming the column to 'cosine_similarity'
-    movie_cosines_df = movie_cosines_df.rename(columns={movieId: 'cosine_similarity'})
-
-    # Removing the row with the index 'movieId'
-    movie_cosines_df = movie_cosines_df[movie_cosines_df.index != movieId]
-
-    # Sorting the DataFrame by the 'cosine_similarity' column in descending order.
-    movie_cosines_df = movie_cosines_df.sort_values(by="cosine_similarity", ascending=False)
-
-    # Finding out the number of users who rated both the input movie and the other movie
-    no_of_users_rated_both_movies = [
-        sum((user_movie_matrix[movieId] > 0) & (user_movie_matrix[other_movieId] > 0))
-        for other_movieId in movie_cosines_df.index
-    ]
-
-    # Creating a column for the number of users who rated both movies
-    movie_cosines_df['users_who_rated_both_movies'] = no_of_users_rated_both_movies
-
-    # Removing recommendations that have less than 20 users who rated both movies.
-    movie_cosines_df = movie_cosines_df[movie_cosines_df["users_who_rated_both_movies"] > 20]
-
-    # Getting the titles of the recommended movies
-    recommended_movie_titles = movie_ratings_tags.loc[movie_cosines_df.index, "title"]
-
-    # Creating a DataFrame with unique titles
-    unique_recommendations = pd.DataFrame({
-        'Movie Title': recommended_movie_titles,
-        'Cosine Similarity': movie_cosines_df['cosine_similarity'],
-        'Users Rated Both Movies': movie_cosines_df['users_who_rated_both_movies']
-    }).drop_duplicates(subset='Movie Title')
-
-    # Returning the top 'n' recommendations with unique titles
-    top_n_recommendations = unique_recommendations.head(n)
-
-    return top_n_recommendations
-
-# Get the current working directory
-base_path = os.getcwd()
-
-# Sample DataFrames 
-movies_cosines_matrix = pd.read_csv(os.path.join(base_path, "movies_cosines_matrix.csv"))  
-user_movie_matrix = pd.read_csv(os.path.join(base_path, "user_movie_matrix.csv"))  
-movie_ratings_tags = pd.read_csv(os.path.join(base_path, "movie_ratings_tags.csv"))
+top_movies_info = top_movies_info.merge(top_movies[['movieId', 'w8ed_score']], on='movieId', how='left')
 
 # Streamlit App
-st.title("WBSFlix Recommender")
-st.write("The best movie recommendations for you!")
+st.title("Top Movie Recommender")
+st.write("Discover top-rated movies!")
 
-# Input for user's favorite movie
-title = st.text_input("What is your favorite movie?")
-st.write("Your favorite movie is:", title)
+# Function to get top recommendations (Input is DataFrame and n)
+def get_top_n(top_movies_info, n):
+    top_n_movies_df = pd.DataFrame(top_movies_info).nlargest(n, "w8ed_score")
+    return top_n_movies_df
 
-# Call the recommendation function
-recommendations = get_top_n_recommendations(title, 5, movies_cosines_matrix, user_movie_matrix, movie_ratings_tags)
+# Input for the number of movies to recommend
+n_recommendations = st.number_input("How many movies would you like to recommend?", min_value=1, max_value=10, value=3, step=1)
 
-# Display the recommendations
-st.write("Top 5 Recommendations:")
-st.table(recommendations)
+# Display the top recommendations
+top_n_recommendations = get_top_n(top_movies_info, n_recommendations)
+st.write(f"Top {n_recommendations} Recommendations:")
+st.table(top_n_recommendations)
