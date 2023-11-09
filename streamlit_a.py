@@ -58,9 +58,9 @@ def get_top_n_recommendations(movie_title, n, movies_cosines_matrix, user_movie_
     return top_n_recommendations
 
 # Sample DataFrames 
-movies_cosines_matrix = pd.read_csv("movies_cosines_matrix.csv")  
-user_movie_matrix = pd.read_csv("user_movie_matrix.csv")  
-movie_ratings_tags = pd.read_csv("movie_ratings_tags.csv") 
+movies_cosines_matrix = pd.read_csv("WBSFlix_Project/movies_cosines_matrix.csv")  
+user_movie_matrix = pd.read_csv("WBSFlix_Project/user_movie_matrix.csv")  
+movie_ratings_tags = pd.read_csv("WBSFlix_Project/movie_ratings_tags.csv") 
 
 # Streamlit App
 st.title("WBSFlix Recommender")
