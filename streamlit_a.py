@@ -1,7 +1,8 @@
+import os
 import pandas as pd
 import streamlit as st
 
-# Function to get top recommendations(Input is title)
+# Function to get top recommendations (Input is title)
 def get_top_n_recommendations(movie_title, n, movies_cosines_matrix, user_movie_matrix, movie_ratings_tags):
     # Find the movieId for the given movie title
     title_column_name = 'title'
@@ -57,10 +58,13 @@ def get_top_n_recommendations(movie_title, n, movies_cosines_matrix, user_movie_
 
     return top_n_recommendations
 
+# Get the current working directory
+base_path = os.getcwd()
+
 # Sample DataFrames 
-movies_cosines_matrix = pd.read_csv("movies_cosines_matrix.csv")  
-user_movie_matrix = pd.read_csv("user_movie_matrix.csv")  
-movie_ratings_tags = pd.read_csv("movie_ratings_tags.csv") 
+movies_cosines_matrix = pd.read_csv(os.path.join(base_path, "movies_cosines_matrix.csv"))  
+user_movie_matrix = pd.read_csv(os.path.join(base_path, "user_movie_matrix.csv"))  
+movie_ratings_tags = pd.read_csv(os.path.join(base_path, "movie_ratings_tags.csv"))
 
 # Streamlit App
 st.title("WBSFlix Recommender")
