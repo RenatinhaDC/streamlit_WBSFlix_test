@@ -5,6 +5,14 @@ import streamlit as st
 import base64
 
 st.set_page_config(layout="wide")
+left, right = st.columns(2)   
+with left:     
+  # add element on the left side   
+with right:     
+  # add element on the right side
+
+
+
 st.markdown("![Alt Text](https://media.giphy.com/media/KpACNEh8jXK2Q/giphy.gif)")
 
 
