@@ -4,7 +4,11 @@ import streamlit as st
 
 import base64
 
-st.set_page_config(page_title="Surge Price Prediction App")
+from PIL import Image
+# Loading Image using PIL
+im = Image.open('/content/App_Icon.png')
+# Adding Image to web app
+st.set_page_config(page_title="Surge Price Prediction App", page_icon = im)
 
 
 st.markdown("![Alt Text](https://media.giphy.com/media/KpACNEh8jXK2Q/giphy.gif)")
