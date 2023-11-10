@@ -54,7 +54,7 @@ with becouse_you_like:
                  .index
                  .to_list()[1:n+1]
              )
-    #similar_movies = item_based_recommender(movie_ratings_tags, input_feature)
+    similar_movies = item_based_recommender(movie_ratings_tags, input_feature)
     
     
 
