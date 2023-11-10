@@ -3,11 +3,11 @@ import streamlit as st
 
 #movie_ratings_tags = pd.read_csv("movie_ratings_tags.csv") 
 
-#becouse_you_like = st.container()
+becouse_you_like = st.container()
 
-#with becouse_you_like:
-st.header('Similar to')
-st.text('Write a name')
+with becouse_you_like:
+    st.header('Similar to')
+    st.text('Write a name')
     
     #selection_col, display_col = st.columns(2)
     #input_feature = str(st.text_input('Movie title'))
