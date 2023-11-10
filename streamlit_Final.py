@@ -6,9 +6,34 @@ import base64
 
 import streamlit as st
 
-audio_url = "https://upload.wikimedia.org/wikipedia/commons/c/c4/Muriel-Nguyen-Xuan-Chopin-valse-opus64-1.ogg"
+data_df = pd.DataFrame(
+    {
+        "category": [
+            "📊 Data Exploration",
+            "📈 Data Visualization",
+            "🤖 LLM",
+            "📊 Data Exploration",
+        ],
+    }
+)
 
-st.audio(audio_url)
+st.data_editor(
+    data_df,
+    column_config={
+        "category": st.column_config.SelectboxColumn(
+            "App Category",
+            help="The category of the app",
+            width="medium",
+            options=[
+                "📊 Data Exploration",
+                "📈 Data Visualization",
+                "🤖 LLM",
+            ],
+            required=True,
+        )
+    },
+    hide_index=True,
+)
 
 st.markdown("![Alt Text](https://media.giphy.com/media/KpACNEh8jXK2Q/giphy.gif)")
 
