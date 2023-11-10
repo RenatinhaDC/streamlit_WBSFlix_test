@@ -34,7 +34,21 @@ st.table(top_n_movies_df)
 movie_ratings = pd.merge(movies_df, ratings_df, on='movieId')
 movie_ratings_tags = pd.merge(movie_ratings, tags_df, on='movieId')
 
-# Define functions for recommendation (unchanged from your code)
+# Define functions
+
+def get_sparse_matrix(data: pd.DataFrame):
+    return data.pivot_table(values='rating', index='userId', columns='title', fill_value=0)
+
+def item_based_recommender(data: pd.DataFrame, title: str, n: int = 5):
+    sparse_matrix = get_sparse_matrix(data)
+    
+    if title not in sparse_matrix.columns:
+        return "Movie not found in the database."
+    
+    movie_correlation = sparse_matrix.corrwith(sparse_matrix[title])
+    
+    similar_movies = movie_correlation.sort_values(ascending=False).index.to_list()[1:n+1]
+    return similar_movies
 
 # Streamlit app for recommendations
 with st.container():
