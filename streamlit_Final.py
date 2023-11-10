@@ -7,9 +7,9 @@ import base64
 st.set_page_config(layout="wide")
 left, right = st.columns(2)   
 with left:     
-  # add element on the left side   
+  add element on the left side   
 with right:     
-  # add element on the right side
+  add element on the right side
 
 
 
