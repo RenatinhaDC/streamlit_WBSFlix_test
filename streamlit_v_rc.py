@@ -1,6 +1,8 @@
 import pandas as pd
 import streamlit as st
 
+movie_ratings_tags = pd.read_csv("movie_ratings_tags.csv") 
+
 with becouse_you_like:
     st.header('Similar to')
     #st.text('Write a name')
@@ -11,7 +13,7 @@ with becouse_you_like:
     # py function get sparse matrix
     def get_sparse_matrix(data: pd.DataFrame): 
 
-         return(user_movie_matrix2 = pd.pivot_table(data=movie_ratings_tags,
+         return(movie_ratings_tags.pivot_table(data=movie_ratings_tags,
                                   values='rating',
                                   index='userId_x',
                                   columns='title',
@@ -23,7 +25,7 @@ with becouse_you_like:
     # py function item based recommender
     def item_based_recommender(data: pd.DataFrame, title: str, n: int=5):
     
-    sparse_matrix = user_movie_matrix2
+    sparse_matrix = get_sparse_matrix(movie_ratings_tags)
         
     return(
          sparse_matrix
@@ -34,4 +36,6 @@ with becouse_you_like:
          )
     similar_movies = item_based_recommender(movie_ratings_tags.copy(), input_feature)
     
-    return(similar_movies)
+    
+
+    st.dataframe(similar_movies)
