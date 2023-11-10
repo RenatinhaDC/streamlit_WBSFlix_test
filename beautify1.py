@@ -13,6 +13,9 @@ movie_ratings = pd.merge(movies_df, ratings_df, on='movieId')
 # Merging movie_ratings and tags on 'movieId'
 movie_ratings_tags = pd.merge(movie_ratings, tags_df, on='movieId')
 
+# Print columns in the DataFrame to verify the column names
+st.write("Columns in movie_ratings_tags DataFrame:", movie_ratings_tags.columns.tolist())
+
 # Create the user-item matrix
 user_item_matrix = movie_ratings_tags.pivot_table(index='userId', columns='title', values='rating', fill_value=0)
 
