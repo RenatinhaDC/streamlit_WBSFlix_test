@@ -34,9 +34,10 @@ st.table(top_n_movies_df)
 movie_ratings = pd.merge(movies_df, ratings_df, on='movieId')
 movie_ratings_tags = pd.merge(movie_ratings, tags_df, on='movieId')
 
-# Define functions
+# Define function
 
 def get_sparse_matrix(data: pd.DataFrame):
+    print("Column Names in Data DataFrame:", data.columns)
     return data.pivot_table(values='rating', index='userId', columns='title', fill_value=0)
 
 def item_based_recommender(data: pd.DataFrame, title: str, n: int = 5):
