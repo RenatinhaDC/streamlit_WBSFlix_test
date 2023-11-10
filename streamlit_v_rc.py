@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-#movie_ratings_tags = pd.read_csv("movie_ratings_tags.csv") 
+movie_ratings_tags = pd.read_csv("movie_ratings_tags.csv") 
 
 becouse_you_like = st.container()
 
@@ -39,7 +39,7 @@ with becouse_you_like:
                  .index
                  .to_list()[1:n+1]
              )
-    similar_movies = item_based_recommender(movie_ratings_tags.copy(), input_feature, 3)
+    similar_movies = item_based_recommender(movie_ratings_tags.copy(), input_feature)
     
     
 
