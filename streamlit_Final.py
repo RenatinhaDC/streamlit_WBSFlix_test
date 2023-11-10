@@ -4,10 +4,15 @@ import streamlit as st
 
 import base64
 
-from PIL import Image
-# Loading Image using PIL
-im = Image.open('/content/App_Icon.png')
-# Adding Image to web app
+hide_default_format = """
+       <style>
+       #MainMenu {visibility: hidden; }
+       footer {visibility: hidden;}
+       </style>
+       """
+st.markdown(hide_default_format, unsafe_allow_html=True)
+
+
 st.set_page_config(page_title="Surge Price Prediction App", page_icon = im)
 
 
