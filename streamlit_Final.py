@@ -4,7 +4,7 @@ import streamlit as st
 
 import base64
 
-
+st.set_page_config(layout="wide")
 st.markdown("![Alt Text](https://media.giphy.com/media/KpACNEh8jXK2Q/giphy.gif)")
 
 
