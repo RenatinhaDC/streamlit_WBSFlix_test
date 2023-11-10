@@ -5,25 +5,10 @@ import streamlit as st
 import base64
 
 import streamlit as st
-import numpy as np
-from scipy.io.wavfile import write
 
-sample_rate = 44100
-duration = 5  # Duration in seconds
-frequencies = [261.63, 329.63, 392.00]  # C Major chord frequencies
+audio_url = "https://upload.wikimedia.org/wikipedia/commons/c/c4/Muriel-Nguyen-Xuan-Chopin-valse-opus64-1.ogg"
 
-t = np.linspace(0, duration, int(sample_rate * duration), endpoint=False)
-notes = [np.sin(2 * np.pi * f * t) for f in frequencies]
-chord = np.sum(notes, axis=0) / len(frequencies)  # Combine the notes
-
-# Scale to 16-bit values
-audio = (chord * 32767).astype(np.int16)
-
-# Write the waveform to a .wav file
-write("chord.wav", sample_rate, audio)
-
-# Stream the audio file
-st.audio("chord.wav")
+st.audio(audio_url)
 
 st.markdown("![Alt Text](https://media.giphy.com/media/KpACNEh8jXK2Q/giphy.gif)")
 
