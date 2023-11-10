@@ -9,23 +9,15 @@ import numpy as np
 from scipy.io.wavfile import write
 
 sample_rate = 44100  # 44100 samples per second
-seconds = 15 # Note duration of 2 seconds
+seconds = 5  # Reducing the duration to 5 seconds
 
 frequency_la = 440  # Our played note will be 440 Hz
 
-# Generate array with seconds*sample_rate steps, ranging between 0 and seconds
 t = np.linspace(0, seconds, seconds * sample_rate, False)
-
-# Generate a 440 Hz sine wave
 note_la = np.sin(frequency_la * t * 2 * np.pi)
-
-# Scale to 16-bit values
 audio = (note_la * 32767).astype(np.int16)
 
-# Write the waveform to a .wav file
 write("output.wav", sample_rate, audio)
-
-# Stream the audio file
 st.audio("output.wav")
 
 st.markdown("![Alt Text](https://media.giphy.com/media/KpACNEh8jXK2Q/giphy.gif)")
