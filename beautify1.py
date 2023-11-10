@@ -1,68 +1,46 @@
 import pandas as pd
 import streamlit as st
 
-# Title and Description
-st.title("Movie Recommender")
-st.subheader("Explore Popular Movies")
-
-# Select number of most popular movies
-n = st.slider("Select the number of most popular movies to display:", 0, 100, 1)
-st.write("You've chosen to display", n, "popular movies.")
-
-# Read data
+# Load your CSV files and merge as needed
 links_df = pd.read_csv('links.csv')
 movies_df = pd.read_csv('movies.csv')
 ratings_df = pd.read_csv('ratings.csv')
 tags_df = pd.read_csv('tags.csv')
 
-# Analyze movie ratings data
-ratings_mc_df = ratings_df.groupby("movieId")["rating"].agg(["mean", "count"]).reset_index()
-ratings_mc_df["overall_rating"] = (ratings_mc_df["mean"] * 2) + (ratings_mc_df["count"] * 0.01)
-ratings_mc_df_merged = ratings_mc_df.merge(movies_df, on="movieId", how="inner")
-ratings_mc_merged_df = ratings_mc_df_merged[["movieId", "title", "genres", "mean", "count", "overall_rating"]]
-
-# Get top N movies
-top_n_movies_df = pd.DataFrame(ratings_mc_merged_df).nlargest(n, "overall_rating")
-top_n_movies_df = top_n_movies_df[["title", "genres"]]
-top_n_movies_df.reset_index(drop=True, inplace=True)
-
-# Display top N movies
-st.subheader(f"Top {n} Popular Movies")
-st.table(top_n_movies_df)
-
-# Merging movies and ratings on 'movieId' for recommendation
+# Merging movies and ratings on 'movieId'
 movie_ratings = pd.merge(movies_df, ratings_df, on='movieId')
+
+# Merging movie_ratings and tags on 'movieId'
 movie_ratings_tags = pd.merge(movie_ratings, tags_df, on='movieId')
 
-# Define function
+# Create the user-item matrix
+user_item_matrix = movie_ratings_tags.pivot_table(index='userId', columns='title', values='rating', fill_value=0)
 
-def get_sparse_matrix(data: pd.DataFrame):
-    print("Column Names in Data DataFrame:", data.columns)
-    return data.pivot_table(values='rating', index='userId', columns='title', fill_value=0)
-
-def item_based_recommender(data: pd.DataFrame, title: str, n: int = 5):
-    sparse_matrix = get_sparse_matrix(data)
-    
-    if title not in sparse_matrix.columns:
+# Define function for recommendation
+def item_based_recommender(movie_title, user_item_matrix, n=5):
+    if movie_title not in user_item_matrix.columns:
         return "Movie not found in the database."
     
-    movie_correlation = sparse_matrix.corrwith(sparse_matrix[title])
-    
-    similar_movies = movie_correlation.sort_values(ascending=False).index.to_list()[1:n+1]
+    # Calculate correlation with other movies
+    similar_movies = user_item_matrix.corrwith(user_item_matrix[movie_title])
+
+    # Sort and select top 'n' similar movies
+    similar_movies = similar_movies.sort_values(ascending=False).head(n+1)[1:]
+
     return similar_movies
 
 # Streamlit app for recommendations
-with st.container():
-    st.header('Find Similar Movies')
+st.title("Movie Recommender")
+st.header('Find Similar Movies')
 
-    input_feature = st.text_input('Enter a movie title', placeholder='E.g., The Matrix')
+input_feature = st.text_input('Enter a movie title', '')
 
-    if input_feature:
-        st.write("Your selected movie is:", input_feature)
-        similar_movies = item_based_recommender(movie_ratings_tags, input_feature)
+if input_feature:
+    st.write("Your selected movie is:", input_feature)
+    similar_movies = item_based_recommender(input_feature, user_item_matrix)
 
-        if isinstance(similar_movies, list):
-            st.subheader("Recommended Movies")
-            st.write(similar_movies)
-        else:
-            st.write(similar_movies)
+    if isinstance(similar_movies, pd.Series):
+        st.subheader("Recommended Movies")
+        st.write(similar_movies.index.tolist())
+    else:
+        st.write(similar_movies)
