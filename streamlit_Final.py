@@ -9,7 +9,7 @@ import numpy as np
 from scipy.io.wavfile import write
 
 sample_rate = 44100  # 44100 samples per second
-seconds = 2  # Note duration of 2 seconds
+seconds = 15 # Note duration of 2 seconds
 
 frequency_la = 440  # Our played note will be 440 Hz
 
