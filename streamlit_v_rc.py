@@ -1,11 +1,11 @@
 import pandas as pd
 import streamlit as st
 
-movie_ratings_tags = pd.read_csv("movie_ratings_tags.csv") 
+#movie_ratings_tags = pd.read_csv("movie_ratings_tags.csv") 
 
-becouse_you_like = st.container()
+#becouse_you_like = st.container()
 
-with becouse_you_like:
+#with becouse_you_like:
     st.header('Similar to')
     st.text('Write a name')
     
