@@ -3,6 +3,21 @@ import streamlit as st
 
 movie_ratings_tags = pd.read_csv("movie_ratings_tags.csv") 
 
+#links= pd.read_csv("links.csv")
+
+movies= pd.read_csv("movies.csv")
+
+ratings= pd.read_csv("ratings.csv")
+
+tags= pd.read_csv("tags.csv")
+
+# Merging movies and ratings on 'movieId'
+movie_ratings = pd.merge(movies, ratings, on='movieId')
+
+# Merging movie_ratings and tags on 'movieId'
+movie_ratings_tags = pd.merge(movie_ratings, tags, on='movieId')
+
+
 becouse_you_like = st.container()
 
 with becouse_you_like:
