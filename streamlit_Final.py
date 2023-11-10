@@ -5,11 +5,6 @@ import streamlit as st
 import base64
 
 
-st.markdown(hide_default_format, unsafe_allow_html=True)
-
-
-st.set_page_config(page_title="Surge Price Prediction App", page_icon = im)
-
 
 st.markdown("![Alt Text](https://media.giphy.com/media/KpACNEh8jXK2Q/giphy.gif)")
 
