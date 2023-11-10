@@ -6,8 +6,8 @@ import streamlit as st
 #becouse_you_like = st.container()
 
 #with becouse_you_like:
-    st.header('Similar to')
-    st.text('Write a name')
+st.header('Similar to')
+st.text('Write a name')
     
     #selection_col, display_col = st.columns(2)
     #input_feature = str(st.text_input('Movie title'))
