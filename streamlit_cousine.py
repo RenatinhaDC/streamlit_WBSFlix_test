@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 
 # Sample DataFrames 
-movies_cosines_matrix = pd.read_csv("movies_cosines_matrix.csv")  
+#movies_cosines_matrix = pd.read_csv("movies_cosines_matrix.csv")  
 user_movie_matrix = pd.read_csv("user_movie_matrix.csv")  
 movie_ratings_tags = pd.read_csv("movie_ratings_tags.csv") 
 
