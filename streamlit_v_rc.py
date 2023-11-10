@@ -8,11 +8,12 @@ becouse_you_like = st.container()
 with becouse_you_like:
     st.header('Similar to')
     #st.text('Write a name')
-    title = st.text_input("What is your favorite movie?")
-    st.write("Your favorite movie is:", title)
-    #selection_col, display_col = st.columns(2)
-    #input_feature = str(st.text_input('Movie title'))
+    #title = st.text_input("What is your favorite movie?")
+    #st.write("Your favorite movie is:", title)
     
+    #selection_col, display_col = st.columns(2)
+    input_feature = str(st.text_input('Movie title'))
+    st.write("Your favorite movie is:", input_feature)
     # py function get sparse matrix
     #def get_sparse_matrix(data: pd.DataFrame): 
 
